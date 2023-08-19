@@ -63,12 +63,12 @@ class ElevatorController extends Controller
 
         // Elevator is in idle state, proceed with the movement
 
-        // Create a new elevator log for the 'moving' state
+        // Create a new elevator log
         $elevatorLog = new ElevatorLog([
             'elevator_id' => $elevator->id,
             'user_id' => auth()->id(),
             'current_floor' => $currentFloor,
-            'state' => 'moving',
+            'state' => $currentFloor->state,
             'direction' => $direction,
             'action' => 'call',
             'details' => ['target_floor' => $targetFloor], // Store the target floor

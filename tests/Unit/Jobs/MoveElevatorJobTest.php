@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Queue;
 
 class MoveElevatorJobTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
-    public function test_it_handles_new_idle_state_with_no_pending_calls()
+    public function test_it_handles_idle_state_with_no_pending_calls()
     {
         Queue::fake();
 
@@ -27,14 +27,12 @@ class MoveElevatorJobTest extends TestCase
             'active' => true,
         ]);
 
-        // Fetch the initial elevator log associated with the elevator
-        $initialLog = $elevator->logs()->first();
-
         // Create a new elevator log with target floor 1
         $newLog = ElevatorLog::factory()->create([
             'elevator_id' => $elevator->id,
             'current_floor' => $elevator->logs()->latest()->first()->current_floor,
-            'state' => 'idle',
+            'state' => $elevator->logs()->latest()->first()->state,
+            'action' => 'call',
             'details' => json_encode([
                 'target_floor' => 1,
             ]),
@@ -51,8 +49,7 @@ class MoveElevatorJobTest extends TestCase
         // Assert that the correct number of elevator logs are created
         $this->assertDatabaseCount('elevator_logs', 7);
 
-        // Assert specific elevator log states
-        $elevatorLogs = $elevator->logs()->latest()->get();
+        $elevatorLogs = $elevator->logs()->take(7)->get();
 
         $this->assertEquals('idle', $elevatorLogs[0]->state);
         $this->assertEquals('idle', $elevatorLogs[1]->state);

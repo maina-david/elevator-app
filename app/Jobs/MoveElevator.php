@@ -38,88 +38,34 @@ class MoveElevator implements ShouldQueue
      */
     public function handle()
     {
-        // Check if there are pending calls for the elevator
-        $pendingCalls = PendingElevatorCall::where('elevator_id', $this->elevatorLog->elevator_id)
-            ->where('executed', false)
-            ->orderBy('created_at')
-            ->get();
-
-        // Determine direction of elevator movement based on target floor
         $details = json_decode($this->elevatorLog->details, true);
         $targetFloor = $details['target_floor'] ?? null;
 
-        // Flag to track whether the elevator has gone idle
-        $wentIdle = false;
-
-        if ($pendingCalls->count() > 0) {
-            foreach ($pendingCalls as $pendingCall) {
-                // Check if the elevator should stop at this floor
-                $direction = $pendingCall->target_floor > $this->elevatorLog->current_floor ? 'up' : 'down';
-                if ($this->shouldStopAtFloor($pendingCall, $direction)) {
-                    // Log the action, stop at the floor, simulate doors, etc.
-                    $this->logAction('stopped', $pendingCall->target_floor);
-                    $this->simulateDoorsOpening();
-                    $this->simulateDoorsClosing();
-
-                    // Mark the pending call as executed and calculate execution duration
-                    $pendingCall->update([
-                        'executed' => true,
-                        'execution_duration' => now()->diffInSeconds($pendingCall->created_at),
-                    ]);
-                }
-
-                // Simulate movement between pending calls
-                if ($pendingCall->target_floor !== $this->elevatorLog->current_floor) {
-                    $this->simulateMovement($pendingCall->target_floor);
-                }
-
-                // Elevator went idle during processing pending calls
-                if ($this->elevatorLog->state === 'idle' && !$wentIdle) {
-                    $wentIdle = true;
-                }
-            }
-        }
-
-        // Check if the elevator is idle and the target floor is the same as the current floor
-        if ($targetFloor === $this->elevatorLog->current_floor && $this->elevatorLog->state === 'idle') {
-            // Open and close the doors, then update to idle
-            $this->logAction('doors_opening');
+        // Check if the target floor is the same as the current floor
+        if (
+            $this->elevatorLog->state === 'idle' &&
+            $this->elevatorLog->action === 'call' &&
+            $targetFloor === $this->elevatorLog->current_floor
+        ) {
+            // Open and close the doors
             $this->simulateDoorsOpening();
             $this->simulateDoorsClosing();
             $this->logAction('idle');
         } else {
-            // Check if the elevator is not idle and there is a target floor
-            if ($targetFloor !== null && $this->elevatorLog->state !== 'idle') {
-                // Continue moving to the original target floor
+            // Check if the elevator is idle and there is a target floor
+            if (
+                $targetFloor !== null &&
+                $targetFloor !== $this->elevatorLog->current_floor &&
+                $this->elevatorLog->state === 'idle'
+            ) {
+                // Move to the target floor
                 $this->simulateMovement($targetFloor);
-
-                // Log the remaining actions
-                $this->logAction('stopped');
                 $this->simulateDoorsOpening();
-                $this->logAction('doors_open');
                 $this->simulateDoorsClosing();
-                $this->logAction('doors_closed');
-
-                // Elevator goes idle
-                $this->logAction('idle');
-                // Check if there are pending calls when the elevator state becomes idle
-                $this->handlePendingCallsOnIdle();
-            } elseif ($targetFloor !== null) {
-                // Elevator is idle, move to the target floor
-                $this->simulateMovement($targetFloor);
-
-                // Log the stopping action
-                $this->logAction('stopped');
             }
         }
-
-        // Log "idle" action only if elevator went idle during the process
-        if ($wentIdle) {
-            $this->logAction('idle');
-            // Check if there are pending calls when the elevator state becomes idle
-            $this->handlePendingCallsOnIdle();
-        }
     }
+
 
 
     /**
@@ -138,8 +84,7 @@ class MoveElevator implements ShouldQueue
             'doors_opening',
             'doors_open',
             'doors_closing',
-            'doors_closed',
-            'maintenance'
+            'doors_closed'
         ];
 
         if (!in_array($state, $validStates)) {
@@ -228,21 +173,6 @@ class MoveElevator implements ShouldQueue
     }
 
     /**
-     * Simulate elevator movement.
-     *
-     * @param int $targetFloor
-     * @return void
-     */
-    protected function simulateMovement($targetFloor)
-    {
-        $floorsToMove = abs($targetFloor - $this->elevatorLog->current_floor);
-        $movementTime = $floorsToMove * $this->floorTravelTime;
-        sleep($movementTime);
-        $this->elevatorLog->current_floor = $targetFloor; // Update current floor
-        $this->logAction('moving');
-    }
-
-    /**
      * Check if the elevator should stop at the given floor.
      *
      * @param PendingElevatorCall $pendingCall
@@ -302,7 +232,6 @@ class MoveElevator implements ShouldQueue
         }
     }
 
-
     /**
      * Simulate doors opening.
      *
@@ -325,5 +254,21 @@ class MoveElevator implements ShouldQueue
         $this->logAction('doors_closing');
         sleep($this->doorOpenCloseTime); //
         $this->logAction('doors_closed');
+    }
+
+    /**
+     * Simulate elevator movement.
+     *
+     * @param int $targetFloor
+     * @return void
+     */
+    protected function simulateMovement($targetFloor)
+    {
+        $floorsToMove = abs($targetFloor - $this->elevatorLog->current_floor);
+        $movementTime = $floorsToMove * $this->floorTravelTime;
+        $this->logAction('moving');
+        sleep($movementTime);
+        $this->logAction('stopped');
+        $this->elevatorLog->current_floor = $targetFloor; // Update current floor
     }
 }

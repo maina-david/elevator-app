@@ -13,23 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $validStates = [
-            'idle',
-            'moving',
-            'stopped',
-            'doors_opening',
-            'doors_open',
-            'doors_closing',
-            'doors_closed',
-            'maintenance'
-        ];
 
-        Schema::create('elevator_logs', function (Blueprint $table) use ($validStates) {
+        Schema::create('elevator_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Elevator::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(User::class)->nullable()->constrained();
             $table->bigInteger('current_floor');
-            $table->enum('state', $validStates)->default('idle');
+            $table->string('state', 100)->default('idle');
             $table->string('direction', 100)->nullable();
             $table->string('action', 100)->nullable();
             $table->json('details')->nullable();
