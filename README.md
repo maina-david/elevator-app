@@ -1,6 +1,6 @@
-# Laravel Elevator App
+# Elevator App
 
-Welcome to the README file for the Laravel Elevator App. This document provides instructions for setting up, configuring, and using the Laravel Elevator App on your local machine.
+This document provides instructions for setting up, configuring, and using the Elevator App on your local machine.
 
 ## Table of Contents
 
