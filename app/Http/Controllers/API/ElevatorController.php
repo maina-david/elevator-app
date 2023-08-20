@@ -105,9 +105,9 @@ class ElevatorController extends Controller
             'details' => json_encode(['target_floor' => $targetFloor]),
         ]);
         $elevatorLog->save();
-        
+
         // Dispatch the MoveElevator job to the queue
-        MoveElevator::dispatch($elevatorLog);
+        MoveElevator::dispatchAfterResponse($elevatorLog);
 
         return $this->success('Elevator movement has been initiated.');
     }
