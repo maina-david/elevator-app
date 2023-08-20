@@ -107,7 +107,7 @@ class ElevatorController extends Controller
         $elevatorLog->save();
 
         // Dispatch the MoveElevator job to the queue
-        MoveElevator::dispatchAfterResponse($elevatorLog);
+        MoveElevator::dispatch($elevatorLog);
 
         return $this->success('Elevator movement has been initiated.');
     }
