@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\ElevatorActionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BuildingResource;
 use App\Jobs\MoveElevator;
@@ -20,7 +21,7 @@ class ElevatorController extends Controller
         $request->validate([
             'name' => 'required|string|unique:buildings,name',
             'number_of_floors' => 'required|numeric',
-            'elevators' => 'required|array',
+            'elevators' => 'array',
             'elevators.*.name' => 'required|string',
             'elevators.*.active' => 'boolean'
         ]);
@@ -44,7 +45,19 @@ class ElevatorController extends Controller
         return $this->success('Buildings retrieved successfully', BuildingResource::collection($buildings));
     }
 
-    public function callElevator(Elevator $elevator, Request $request): JsonResponse
+    public function createElevator(Building $building, Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'active' => 'boolean'
+        ]);
+
+        $elevator = $building->elevators()->create($request->only('name', 'active'));
+
+        return $this->success('Elevator created successfully!', ['elevator' => $elevator]);
+    }
+
+    public function callElevator(Elevator $elevator, Request $request)
     {
         $building = $elevator->building;
 
@@ -56,17 +69,18 @@ class ElevatorController extends Controller
             ]
         ]);
 
-        $targetFloor = $request->input('target_floor');
-        $currentFloor = $elevator->logs->latest()->value('current_floor');
+        $targetFloor = $request->target_floor;
+        $elevatorLog = $elevator->logs()->latest()->first()->current_floor;
+        $currentFloor = $elevator->logs()->latest()->first()->current_floor;
+        $currentState = $elevator->logs()->latest()->first()->state;
         $direction = ($targetFloor > $currentFloor) ? 'up' : 'down';
 
         // Check if elevator is not in idle state
-        if ($elevator->state !== 'idle') {
+        if ($currentState !== 'idle') {
             // Store the elevator call as a pending call
             $pendingCall = PendingElevatorCall::create([
                 'elevator_id' => $elevator->id,
-                'target_floor' => $targetFloor,
-                'executed' => false, // Initialize as not executed
+                'target_floor' => $targetFloor
             ]);
 
             // Return a response indicating that the elevator call has been queued
@@ -85,13 +99,13 @@ class ElevatorController extends Controller
             'elevator_id' => $elevator->id,
             'user_id' => auth()->id(),
             'current_floor' => $currentFloor,
-            'state' => $currentFloor->state,
+            'state' => $currentState,
             'direction' => $direction,
             'action' => 'call',
-            'details' => ['target_floor' => $targetFloor], // Store the target floor
+            'details' => json_encode(['target_floor' => $targetFloor]),
         ]);
         $elevatorLog->save();
-
+        
         // Dispatch the MoveElevator job to the queue
         MoveElevator::dispatch($elevatorLog);
 

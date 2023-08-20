@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ElevatorController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,7 +26,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(ElevatorController::class)->group(function () {
         Route::post('/create-building', 'createBuildingWithElevators');
         Route::get('/list-buildings', 'listBuildingsWithElevators')->withoutMiddleware('auth:sanctum');
-
+        Route::post('/{building}/create-elevator', 'createElevator');
         Route::post('/call-elevator/{elevator}', 'callElevator');
     });
 });

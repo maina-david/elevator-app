@@ -14,8 +14,8 @@ class CheckRequiredHeaders
      * @var array
      */
     protected $requiredHeaders = [
-        'Accept',
-        'Content-Type',
+        // 'Accept',
+        // 'Content-Type',
     ];
 
     /**

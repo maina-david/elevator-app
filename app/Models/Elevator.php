@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\NewElevatorCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -47,6 +48,7 @@ class Elevator extends Model
         parent::boot();
 
         static::created(function ($elevator) {
+            NewElevatorCreated::dispatch($elevator);
             // Create an initial elevator log with default details
             ElevatorLog::create([
                 'elevator_id' => $elevator->id,
