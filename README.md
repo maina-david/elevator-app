@@ -67,6 +67,12 @@ Before you begin, ensure that you have the following installed on your system:
     PUSHER_APP_CLUSTER=mt1
     ```
 
+    **Note: Ensure the Broadcast Driver is set to pusher in the `.env` file**
+
+    ```bash
+    BROADCAST_DRIVER=pusher
+    ```
+
 10. Run database migrations to set up the database tables:
 
    ```bash
@@ -88,8 +94,8 @@ Authenticated routes:
 
 - `POST /api/create-building` - Create a building with elevators.
 - `GET /api/list-buildings` - List buildings with elevators.
-- `POST /api/{building}/create-elevator` - Create an elevator for a building.
-- `POST /api/call-elevator/{elevator}` - Call an elevator.
+- `POST /api/{buildingId}/create-elevator` - Create an elevator for a building.
+- `POST /api/call-elevator/{elevatorId}` - Call an elevator.
 
 ### Request Payloads
 
