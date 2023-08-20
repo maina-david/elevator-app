@@ -25,7 +25,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(ElevatorController::class)->group(function () {
         Route::post('/create-building', 'createBuildingWithElevators');
-        Route::get('/list-buildings', 'listBuildingsWithElevators')->withoutMiddleware('auth:sanctum');
+        Route::get('/list-buildings', 'listBuildingsWithElevators');
         Route::post('/{building}/create-elevator', 'createElevator');
         Route::post('/call-elevator/{elevator}', 'callElevator');
     });
