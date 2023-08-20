@@ -90,6 +90,8 @@ The Elevator App exposes the following API endpoints:
 - `POST /api/register` - Register a new user.
 - `POST /api/login` - Authenticate a user.
 
+**Note: The websocket server must be running when hitting the `POST` endpoints or the application will throw a cURL error.**
+
 Authenticated routes:
 
 - `POST /api/create-building` - Create a building with elevators.
