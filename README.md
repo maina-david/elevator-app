@@ -194,4 +194,6 @@ Tests will run on a clean database and will refresh it after completion.
 
 Remember to keep the application and WebSockets servers running while using the app.
 
+ **Note: All SQL queries executed by the application are logged in ``storage/logs/DB-SQL-queries-executed.log``**
+
 For any questions or issues, please contact me via email.
