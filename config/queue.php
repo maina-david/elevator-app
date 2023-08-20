@@ -29,6 +29,10 @@ return [
     */
 
     'connections' => [
+        'dynamic' => [
+            'driver' => 'sync',
+            'connection' => 'default',
+        ],
 
         'sync' => [
             'driver' => 'sync',
