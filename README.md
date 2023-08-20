@@ -55,7 +55,19 @@ Before you begin, ensure that you have the following installed on your system:
    php artisan key:generate
    ```
 
-9. Run database migrations to set up the database tables:
+9. Set arbitrary values for the PUSHER_ variables in the `.env` file. It does not matter what you set as your `PUSHER_` variables.
+
+    ```bash
+    PUSHER_APP_ID=12345
+    PUSHER_APP_KEY=qwerty
+    PUSHER_APP_SECRET=secret
+    PUSHER_HOST=127.0.0.1
+    PUSHER_PORT=6001
+    PUSHER_SCHEME=http
+    PUSHER_APP_CLUSTER=mt1
+    ```
+
+10. Run database migrations to set up the database tables:
 
    ```bash
    php artisan migrate
@@ -103,7 +115,7 @@ Authenticated routes (require the Accept: application/json header):
 
   ```json
   {
-    "name": "Building 4",
+    "name": "Building 1",
     "number_of_floors": 10,
     "elevators": [
       { "name": "Elevator 1" },
@@ -119,7 +131,7 @@ Authenticated routes (require the Accept: application/json header):
 
   ```json
   {
-    "name": "New Elevator 2",
+    "name": "New Elevator 6",
     "active": true
   }
   ```
