@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $message = auth()->check() ? 'Query executed by User: ' . auth()->id() : 'Query executed: ';
+        $message = auth()->user() ? 'Query executed by User: ' . auth()->id() : 'Query executed: ';
 
         DB::listen(function (QueryExecuted $query) use ($message) {
             Log::build([
