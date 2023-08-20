@@ -21,7 +21,7 @@ class LogQueries
         $response = $next($request);
 
         // Check if the 'db' (database) service is registered in the container
-        if (app()->bound('db') && config('app.debug')) {
+        if (app()->bound('db')) {
             // Retrieve the executed queries from the query log
             $queries = DB::getQueryLog();
 

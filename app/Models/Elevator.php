@@ -18,6 +18,8 @@ class Elevator extends Model
         'active'
     ];
 
+    protected $with = 'logs';
+    
     /**
      * Get the building that owns the Elevator
      *
