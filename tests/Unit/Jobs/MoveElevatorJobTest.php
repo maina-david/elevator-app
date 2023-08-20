@@ -206,6 +206,7 @@ class MoveElevatorJobTest extends TestCase
     //     $this->assertEquals(true, $pendingElevatorCall->fresh()->executed);
     // }
 
+
     public function test_it_handles_multiple_pending_calls()
     {
         // Fake the Queue for testing
@@ -250,40 +251,47 @@ class MoveElevatorJobTest extends TestCase
         // Fetch the latest logs
         $elevatorLogs = $elevator->logs()->get();
 
-        // Initialize the current floor to track elevator progress
-        $currentFloor = $elevatorLogs[0]->current_floor;
+        // Assert database log count
+        $this->assertCount(32, $elevatorLogs);
 
-        // Loop through the pending call floors
-        foreach ($pendingCallTargetFloors as $targetFloor) {
-            // Assert that the elevator stops at the pending call floor
-            $this->assertEquals('stopped', $elevatorLogs[$currentFloor + 7]->state);
+        // Assert elevator states and actions
+        $expectedStates = [
+            'idle',
+            'idle',
+            'moving',
+            'moving',
+            'moving',
+            'stopped',
+            'doors_opening',
+            'doors_open',
+            'doors_closing',
+            'doors_closed',
+            'moving',
+            'moving',
+            'stopped',
+            'doors_opening',
+            'doors_open',
+            'doors_closing',
+            'doors_closed',
+            'moving',
+            'moving',
+            'stopped',
+            'doors_opening',
+            'doors_open',
+            'doors_closing',
+            'doors_closed',
+            'moving',
+            'moving',
+            'stopped',
+            'doors_opening',
+            'doors_open',
+            'doors_closing',
+            'doors_closed',
+            'idle'
+        ];
 
-            // Assert the door states after stopping at the pending call floor
-            $this->assertEquals('doors_opening', $elevatorLogs[$currentFloor + 8]->state);
-            $this->assertEquals('doors_open', $elevatorLogs[$currentFloor + 9]->state);
-            $this->assertEquals('doors_closing', $elevatorLogs[$currentFloor + 10]->state);
-            $this->assertEquals('doors_closed', $elevatorLogs[$currentFloor + 11]->state);
-
-            // Assert that the elevator continues moving to the next target floor
-            $this->assertEquals('moving', $elevatorLogs[$currentFloor + 12]->state);
-
-            // Update the current floor for the next iteration
-            $currentFloor = $targetFloor;
-
-            // Increment the assertions for each pending call
-            $currentFloor++;
+        foreach ($elevatorLogs as $index => $log) {
+            $this->assertEquals($expectedStates[$index], $log->state);
         }
-
-        // Assert that the elevator stops at the final target floor
-        $this->assertEquals('stopped', $elevatorLogs[$currentFloor + 7]->state);
-
-        // Assert the door states after stopping at the final target floor
-        $this->assertEquals('doors_opening', $elevatorLogs[$currentFloor + 8]->state);
-        $this->assertEquals('doors_open', $elevatorLogs[$currentFloor + 9]->state);
-        $this->assertEquals('doors_closing', $elevatorLogs[$currentFloor + 10]->state);
-        $this->assertEquals('doors_closed', $elevatorLogs[$currentFloor + 11]->state);
-
-        // Assert that the elevator is idle after completing the task
-        $this->assertEquals('idle', $elevatorLogs[$currentFloor + 12]->state);
     }
 }
