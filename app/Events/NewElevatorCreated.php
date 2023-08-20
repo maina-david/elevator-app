@@ -43,7 +43,7 @@ class NewElevatorCreated implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return 'new-elevator-created';
+        return 'New elevator created';
     }
 
     /**

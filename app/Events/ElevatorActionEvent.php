@@ -85,9 +85,9 @@ class ElevatorActionEvent implements ShouldBroadcast
 
             // Determine the final message based on matching state and action
             if ($formattedState === $formattedAction) {
-                $formattedMessage = "Elevator({$this->elevatorLog->elevator->name}) at {$floorNames[$currentFloor]} Floor: $formattedState";
+                $formattedMessage = "Elevator at {$floorNames[$currentFloor]} Floor: $formattedState";
             } else {
-                $formattedMessage = "Elevator({$this->elevatorLog->elevator->name}) at {$floorNames[$currentFloor]} Floor: $formattedState - $formattedAction";
+                $formattedMessage = "Elevator at {$floorNames[$currentFloor]} Floor: $formattedState - $formattedAction";
             }
 
             return $formattedMessage;

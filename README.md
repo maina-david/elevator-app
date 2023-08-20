@@ -1,66 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Elevator App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Welcome to the README file for the Laravel Elevator App. This document provides instructions for setting up, configuring, and using the Laravel Elevator App on your local machine.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [API Endpoints](#api-endpoints)
+  - [Request Payloads](#request-payloads)
+- [Running Tests](#running-tests)
+- [Starting the App](#starting-the-app)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Prerequisites
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Before you begin, ensure that you have the following installed on your system:
 
-## Learning Laravel
+- [Composer](https://getcomposer.org/)
+- PHP version 8.1 or later
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Installation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone or download the repository to your local machine.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Navigate to the project directory in your terminal.
 
-## Laravel Sponsors
+3. Make sure you have the required PHP version by running:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+   ```bash
+   php -v
+   ```
 
-### Premium Partners
+   If the version is not 8.1 or later, please install the required version.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+4. Install project dependencies using Composer:
 
-## Contributing
+   ```bash
+   composer install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. Copy the `.env.example` file and create a `.env` file:
 
-## Code of Conduct
+   ```bash
+   cp .env.example .env
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Edit the `.env` file to provide your database credentials.
 
-## Security Vulnerabilities
+7. Laravel will attempt to create the specified database if it doesn't exist. Don't worry if the database isn't created manually.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. Generate the application key:
 
-## License
+   ```bash
+   php artisan key:generate
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+9. Run database migrations to set up the database tables:
+
+   ```bash
+   php artisan migrate
+   ```
+
+## Usage
+
+### API Endpoints
+
+The Laravel Elevator App exposes the following API endpoints:
+
+- `POST /register` - Register a new user.
+- `POST /login` - Authenticate a user.
+
+Authenticated routes (require the Accept: application/json header):
+
+- `POST /create-building` - Create a building with elevators.
+- `GET /list-buildings` - List buildings with elevators.
+- `POST /{building}/create-elevator` - Create an elevator for a building.
+- `POST /call-elevator/{elevator}` - Call an elevator.
+
+### Request Payloads
+
+- Payload for registering a new user:
+
+  ```json
+  {
+    "name": "Test User",
+    "email": "test@test.com",
+    "password": "password",
+    "password_confirmation": "password"
+  }
+  ```
+
+- Payload for logging in:
+
+  ```json
+  {
+    "email": "test@test.com",
+    "password": "password"
+  }
+  ```
+
+- Payload for creating a building:
+
+  ```json
+  {
+    "name": "Building 4",
+    "number_of_floors": 10,
+    "elevators": [
+      { "name": "Elevator 1" },
+      { "name": "Elevator 2" },
+      { "name": "Elevator 3" },
+      { "name": "Elevator 4" },
+      { "name": "Elevator 5" }
+    ]
+  }
+  ```
+
+- Payload for creating an elevator:
+
+  ```json
+  {
+    "name": "New Elevator 2",
+    "active": true
+  }
+  ```
+
+- Payload for calling an elevator:
+
+  ```json
+  {
+    "target_floor": 5
+  }
+  ```
+
+## Running Tests
+
+To run tests, execute the following command:
+
+```bash
+php artisan test
+```
+
+Tests will run on a clean database and will refresh it after completion.
+
+## Starting the App
+
+1. Start the Laravel app:
+
+   ```bash
+   php artisan serve
+   ```
+
+2. Start the WebSockets server:
+
+   ```bash
+   php artisan websockets:serve
+   ```
+
+3. Access the app in your web browser at [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets) if not redirected.
+
+Remember to keep the application and WebSockets servers running while using the app.
+
+For any questions or issues, please contact me via email.
