@@ -180,9 +180,17 @@ Tests will run on a clean database and will refresh it after completion.
 
 4. Click on the `Connect` button to start displaying dispatched events from the app. Note that events are dispatched when:
 
-    -`New building is created`
-    -`New elevator is created`
-    -`Any action an elevator does` - i.e ``Called, Moving, Stopped, Opening Doors, Doors Open, Doors Closing, Doors Closed and Idle``
+- New building is created
+- New elevator is created
+- Any action an elevator does:
+  - Called
+  - Moving
+  - Stopped
+  - Opening Doors
+  - Doors Open
+  - Doors Closing
+  - Doors Closed
+  - Idle
 
 Remember to keep the application and WebSockets servers running while using the app.
 
