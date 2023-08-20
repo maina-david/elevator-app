@@ -15,22 +15,22 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 
-import Pusher from 'pusher-js';
-window.Pusher = Pusher;
+// import Pusher from 'pusher-js';
+// window.Pusher = Pusher;
 
-window.Echo = new Echo({
-    broadcaster: "pusher",
-    wsHost: import.meta.env.VITE_PUSHER_HOST,
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    wsPort: import.meta.env.VITE_PUSHER_PORT,
-    wssPort: "",
-    forceTLS: false,
-    encrypted: false,
-    disableStats: true,
-    enabledTransports: ["ws", "wss"],
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+// window.Echo = new Echo({
+//     broadcaster: "pusher",
+//     wsHost: import.meta.env.VITE_PUSHER_HOST,
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     wsPort: import.meta.env.VITE_PUSHER_PORT,
+//     wssPort: "",
+//     forceTLS: false,
+//     encrypted: false,
+//     disableStats: true,
+//     enabledTransports: ["ws", "wss"],
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
 
-});
+// });
 
