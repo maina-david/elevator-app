@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Broadcast;
 
 class MoveElevator implements ShouldQueue
 {
@@ -100,8 +101,16 @@ class MoveElevator implements ShouldQueue
             'action' => $state,
             'details' => $details,
         ]);
-
         $elevatorLog->save();
+        // Broadcast the elevator action
+        Broadcast::event('elevator-action', [
+            'elevator_id' => $this->elevatorLog->elevator_id,
+            'current_floor' => $currentFloor,
+            'state' => $state,
+            'direction' => $direction,
+            'target_floor' => $targetFloor,
+            'details' => $details,
+        ]);
     }
 
     /**

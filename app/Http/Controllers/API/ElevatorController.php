@@ -3,30 +3,48 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ElevatorResource;
+use App\Http\Resources\BuildingResource;
 use App\Jobs\MoveElevator;
+use App\Models\Building;
 use App\Models\Elevator;
 use App\Models\ElevatorLog;
 use App\Models\PendingElevatorCall;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ElevatorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $elevators = Elevator::with('logs')->get();
 
-        return $this->success(
-            'Elevators retrieved successfully',
-            ElevatorResource::collection($elevators)
-        );
+    public function createBuildingWithElevators(Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|unique:buildings,name',
+            'number_of_floors' => 'required|numeric',
+            'elevators' => 'required|array',
+            'elevators.*.name' => 'required|string',
+            'elevators.*.active' => 'boolean'
+        ]);
+
+        $building = Building::create([
+            'name' => $request->name,
+            'number_of_floors' => $request->number_of_floors
+        ]);
+
+        foreach ($request->elevators as $elevator) {
+            $building->elevators()->create($elevator);
+        }
+
+        return $this->success('Building with elevators created successfully', new BuildingResource($building));
     }
 
-    public function callElevator(Elevator $elevator, Request $request)
+    public function listBuildingsWithElevators(): JsonResponse
+    {
+        $buildings = Building::with('elevators')->get();
+
+        return $this->success('Buildings retrieved successfully', BuildingResource::collection($buildings));
+    }
+
+    public function callElevator(Elevator $elevator, Request $request): JsonResponse
     {
         $building = $elevator->building;
 
@@ -34,8 +52,7 @@ class ElevatorController extends Controller
             'target_floor' => [
                 'required',
                 'integer',
-                Rule::between(1, $building->number_of_floors)
-                    ->message("The target floor must be between 1 and {$building->number_of_floors}.")
+                "between:1,$building->number_of_floors"
             ]
         ]);
 

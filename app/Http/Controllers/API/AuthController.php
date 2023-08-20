@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\API\User;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRegistrationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -21,31 +22,19 @@ class AuthController extends Controller
      * message and the newly created User data or an error message if the User could not be
      * created.
      */
-    public function registerUser(Request $request): JsonResponse
+    public function registerUser(UserRegistrationRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed|min:8'
-        ]);
+        $userRequest = $request->validated();
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password
+            'name' => $userRequest['name'],
+            'email' => $userRequest['email'],
+            'password' => $userRequest['password']
         ]);
 
-        if ($user) {
-            $token = $user->createToken('MyApp')->accessToken;
-
-            return $this->success('User registered successfully!', [
-                'user' => $user,
-                'access_token' => $token,
-                'token_type' => 'Bearer'
-            ]);
-        } else {
-            return $this->error('Error registering User!', null, 500);
-        }
+        return $this->success('User registered successfully!', [
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -73,7 +62,7 @@ class AuthController extends Controller
 
             $user = auth()->user();
 
-            $token = $user->createToken('MyApp')->accessToken;
+            $token = $user->createToken('MyApp')->plainTextToken;
 
             return $this->success('User authenticated successfully!', [
                 'user' => $user,
@@ -84,5 +73,4 @@ class AuthController extends Controller
 
         return $this->error('Authentication Failed!', null, 401);
     }
-
 }
