@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('query_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->nullable()->constrained();
-            $table->string('ip_address');
             $table->longText('query');
+            $table->bigInteger('query_time')->nullable();
             $table->timestamps();
         });
     }

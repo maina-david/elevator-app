@@ -29,7 +29,7 @@ class LogQueries
             foreach ($queries as $query) {
                 // Insert query details into the 'query_logs' table
                 DB::table('query_logs')->insert([
-                    'user' => auth()->check() ? auth()->id() : NULL,
+                    'user_id' => auth()->check() ? auth()->id() : NULL,
                     'ip_address' => $request->ip(),
                     'query' => $query['query'],         // The SQL query itself
                     'created_at' => now(),              // Timestamp of log creation
