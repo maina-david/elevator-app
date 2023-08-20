@@ -23,13 +23,13 @@ class AppServiceProvider extends ServiceProvider
     {
         DB::listen(function (QueryExecuted $query) {
             // Insert query details into the 'query_logs' table
-            DB::table('query_logs')->insert([
-                'user_id' => auth()->check() ? auth()->id() : NULL,
-                'query' => $query->sql,
-                'query_time' => $query->time,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            // DB::table('query_logs')->insert([
+            //     'user_id' => auth()->check() ? auth()->id() : NULL,
+            //     'query' => $query->sql,
+            //     'query_time' => $query->time,
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ]);
         });
     }
 }
