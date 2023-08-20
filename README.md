@@ -176,7 +176,7 @@ Tests will run on a clean database and will refresh it after completion.
    php artisan websockets:serve
    ```
 
-3. Access the app in your web browser at [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets) if not redirected.
+3. Access the app websockets dashboard in your web browser at [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets).
 
 4. Click on the `Connect` button to start displaying dispatched events from the app. Note that events are dispatched when:
 
