@@ -77,17 +77,19 @@ Before you begin, ensure that you have the following installed on your system:
 
 ### API Endpoints
 
-The Laravel Elevator App exposes the following API endpoints:
+**Note: Ensure that the `Accept: application/json` header is included in all API requests.**
 
-- `POST /register` - Register a new user.
-- `POST /login` - Authenticate a user.
+The Elevator App exposes the following API endpoints:
 
-Authenticated routes (require the Accept: application/json header):
+- `POST /api/register` - Register a new user.
+- `POST /api/login` - Authenticate a user.
 
-- `POST /create-building` - Create a building with elevators.
-- `GET /list-buildings` - List buildings with elevators.
-- `POST /{building}/create-elevator` - Create an elevator for a building.
-- `POST /call-elevator/{elevator}` - Call an elevator.
+Authenticated routes:
+
+- `POST /api/create-building` - Create a building with elevators.
+- `GET /api/list-buildings` - List buildings with elevators.
+- `POST /api/{building}/create-elevator` - Create an elevator for a building.
+- `POST /api/call-elevator/{elevator}` - Call an elevator.
 
 ### Request Payloads
 
