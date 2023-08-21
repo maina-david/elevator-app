@@ -210,7 +210,7 @@ Tests will run on a clean database and will refresh it after completion.
 Remember to keep the application and WebSockets servers running while using the app.
 
 You can choose to run the Elevator calls synchronously by updating the Queue driver to `sync` from `database`
-in the `.env` file and update how the MoveElevator Job is being dispatched from Queue in app/Http/Controllers/API/ElevatorController.php in callElevator method.
+in the `.env` file and update how the MoveElevator Job is being dispatched from Queue in ``app/Http/Controllers/API/ElevatorController.php`` in callElevator method.
 
 ```bash
 QUEUE_CONNECTION=sync
