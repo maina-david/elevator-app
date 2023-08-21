@@ -31,4 +31,17 @@ class ElevatorLog extends Model
         return $this->belongsTo(Elevator::class);
     }
 
+    /**
+     * Boot the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($elevatorLog) {
+            ElevatorActionEvent::dispatch($elevatorLog)->onQueue('elevator_action');
+        });
+    }
 }

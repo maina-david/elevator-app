@@ -102,8 +102,6 @@ class MoveElevator implements ShouldQueue
             'details' => $details,
         ]);
         $elevatorLog->save();
-
-        ElevatorActionEvent::dispatch($elevatorLog);
     }
 
     /**
