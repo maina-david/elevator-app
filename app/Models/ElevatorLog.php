@@ -41,7 +41,7 @@ class ElevatorLog extends Model
         parent::boot();
 
         static::created(function ($elevatorLog) {
-            ElevatorActionEvent::dispatch($elevatorLog)->onQueue('elevator_action');
+            ElevatorActionEvent::dispatch($elevatorLog);
         });
     }
 }
