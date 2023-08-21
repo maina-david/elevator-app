@@ -184,9 +184,15 @@ Tests will run on a clean database and will refresh it after completion.
    php artisan elevator:queue-manager
    ```
 
-4. Access the app websockets dashboard in your web browser at [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets).
+4. Start the Elevator Actions Manager to handle queues for the Elevator Logs
 
-5. Click on the `Connect` button to start displaying dispatched events from the app. Note that events are dispatched when:
+    ```bash
+    php artisan elevator:action-manager
+    ```
+
+5. Access the app websockets dashboard in your web browser at [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets).
+
+6. Click on the `Connect` button to start displaying dispatched events from the app. Note that events are dispatched when:
 
 - New building is created
 - New elevator is created
