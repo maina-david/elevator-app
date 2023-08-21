@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\ElevatorActionEvent;
 use App\Models\ElevatorLog;
 use App\Models\PendingElevatorCall;
 use Illuminate\Bus\Queueable;
@@ -101,6 +102,8 @@ class MoveElevator implements ShouldQueue
             'details' => $details,
         ]);
         $elevatorLog->save();
+
+        ElevatorActionEvent::dispatch($elevatorLog);
     }
 
     /**

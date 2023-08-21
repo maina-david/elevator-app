@@ -106,6 +106,8 @@ class ElevatorController extends Controller
         ]);
         $elevatorLog->save();
 
+        ElevatorActionEvent::dispatch($elevatorLog);
+
         // Dispatch the MoveElevator job to the queue asynchronously
         MoveElevator::dispatch($elevatorLog)->onQueue("elevator_{$elevator->id}");
 
