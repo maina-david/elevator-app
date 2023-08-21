@@ -19,7 +19,7 @@ class Elevator extends Model
     ];
 
     protected $with = 'logs';
-    
+
     /**
      * Get the building that owns the Elevator
      *
