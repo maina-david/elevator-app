@@ -11,6 +11,7 @@ This document provides instructions for setting up, configuring, and using the E
   - [Request Payloads](#request-payloads)
 - [Running Tests](#running-tests)
 - [Starting the App](#starting-the-app)
+- [Issues](#issues)
 
 ## Prerequisites
 
@@ -242,4 +243,6 @@ Ideally using `supervisor` would be the best uproach.
 
  **Note: All SQL queries executed by the application are logged in ``storage/logs/DB-SQL-queries-executed.log``**
 
-For any questions or issues, please contact me via email.
+## Issues
+
+If you find a bug, please contact me via email or file an issue on [the issue tracker on GitHub](https://github.com/maina-david/elevator-app/issues).
