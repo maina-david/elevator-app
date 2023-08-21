@@ -209,11 +209,32 @@ Tests will run on a clean database and will refresh it after completion.
 Remember to keep the application and WebSockets servers running while using the app.
 
 You can choose to run the Elevator calls synchronously by updating the Queue driver to `sync` from `database`
-in the `.env` file.
+in the `.env` file and update how the MoveElevator Job is being dispatched from Queue in app/Http/Controllers/API/ElevatorController.php in callElevator method.
 
 ```bash
 QUEUE_CONNECTION=sync
 ```
+
+Change from:
+
+```php
+// Dispatch the MoveElevator job to the queue asynchronously
+MoveElevator::dispatch($elevatorLog)->onQueue("elevator_{$elevator->id}");
+```
+
+To:
+
+```php
+MoveElevator::dispatch($elevatorLog);
+```
+
+Or:
+
+```php
+MoveElevator::dispatchNow($elevatorLog);
+```
+
+***Note: The above will cause the call-elevator endpoint to wait until the Job is complete then return a response. For long running Jobs, the endpoint will timeout but the elevator will still be moving***
 
 The above custom commands is to avoid `supervisor` installation incase the team member does not have it installed and configured on local machine.
 
