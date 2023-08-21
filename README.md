@@ -209,7 +209,7 @@ Tests will run on a clean database and will refresh it after completion.
 Remember to keep the application and WebSockets servers running while using the app.
 
 You can choose to run the Elevator calls synchronously by updating the Queue driver to `sync` from `database`
-in the `.env` file
+in the `.env` file.
 
 ```bash
 QUEUE_CONNECTION=sync
