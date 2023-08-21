@@ -184,10 +184,10 @@ Tests will run on a clean database and will refresh it after completion.
    php artisan elevator:queue-manager
    ```
 
-4. Start the Elevator Actions Manager to handle queues for the Elevator Logs
+4. Start the Queue Worker to handle queues for the other events i.e New Building, New Elevators & Elevator Actions
 
     ```bash
-    php artisan elevator:action-manager
+    php artisan queue:work
     ```
 
 5. Access the app websockets dashboard in your web browser at [http://localhost:8000/app-websockets](http://localhost:8000/app-websockets).
