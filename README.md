@@ -208,6 +208,10 @@ Tests will run on a clean database and will refresh it after completion.
 
 Remember to keep the application and WebSockets servers running while using the app.
 
+The above custom commands is to avoid `supervisor` installation incase the team member does not have it installed and configured on local machine.
+
+Ideally using `supervisor` would be the best uproach.
+
  **Note: All SQL queries executed by the application are logged in ``storage/logs/DB-SQL-queries-executed.log``**
 
 For any questions or issues, please contact me via email.
