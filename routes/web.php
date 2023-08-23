@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    redirect('/app-websockets');
+    return redirect('/app-websockets');
 });
