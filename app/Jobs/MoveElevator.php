@@ -235,7 +235,7 @@ class MoveElevator implements ShouldQueue
 
         // Log the elevator's initial moving action
         $this->logAction('moving', $currentFloor, $direction, $targetFloor);
-
+        sleep($this->floorTravelTime);
         for ($i = 1; $i <= $floorsToMove; $i++) {
             if ($direction === 'up') {
                 $currentFloor++;
